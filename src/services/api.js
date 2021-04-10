@@ -4,7 +4,7 @@ const API = {
   url: "https://api.clickup.com/api/v2",
 
   headers: {
-    Authorization: process.env.VUE_APP_API_TOKEN,
+    Authorization: process.env.VUE_APP_CLICKUP_TOKEN,
     "Content-Type": "application/json",
   },
 
