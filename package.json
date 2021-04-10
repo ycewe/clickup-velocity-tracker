@@ -1,5 +1,5 @@
 {
-  "name": "vue-velocity",
+  "name": "velocity-tracker",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,9 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "d3": "^6.6.0",
+    "dayjs": "^1.10.4",
+    "node-fetch": "^2.6.1",
     "vue": "^3.0.0"
   },
   "devDependencies": {
@@ -18,7 +21,9 @@
     "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0"
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-vue": "^7.0.0",
+    "prettier": "^2.2.1"
   },
   "eslintConfig": {
     "root": true,
@@ -26,13 +31,18 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
+      "plugin:vue/strongly-recommended",
+      "eslint:recommended",
+      "prettier"
     ],
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "vue/no-unused-vars": "warn",
+      "vue/no-multiple-template-root": "off",
+      "no-unused-vars": "warn"
+    }
   },
   "browserslist": [
     "> 1%",
