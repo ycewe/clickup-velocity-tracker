@@ -94,14 +94,14 @@ export default defineComponent({
 
     onMounted(() => {
       // draw bar chart
-      const width = 600;
+      const width = 500;
       const height = state.sprints.length * 25;
       const transition = d3.transition().duration(500);
 
       const x = d3
         .scaleLinear()
         .domain([0, d3.max(state.sprints, (d) => d.points)])
-        .range([0, width / 2]);
+        .range([0, width * 0.55]);
 
       const y = d3
         .scaleBand()

@@ -43,11 +43,13 @@ export default defineComponent({
 
 <style scoped>
 .title {
-  margin-top: 0;
+  font-size: 2.5rem;
+  text-align: center;
 }
 
 .team-avatar {
-  max-height: 2rem;
+  border-radius: 2rem;
+  max-height: 2.5rem;
   vertical-align: sub;
 }
 
@@ -55,5 +57,6 @@ export default defineComponent({
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto;
+  grid-gap: 2rem;
 }
 </style>

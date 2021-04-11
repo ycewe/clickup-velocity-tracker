@@ -1,5 +1,5 @@
 <template>
-  <section class="container">
+  <section class="velocity-container">
     <h2>
       {{ space.name }}
     </h2>
@@ -51,7 +51,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.container {
-  margin-bottom: 2rem;
+.velocity-container {
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: var(--var-box-shadow-m);
+  background: linear-gradient(135deg, #d1d9e638, #ffffff40);
 }
 </style>

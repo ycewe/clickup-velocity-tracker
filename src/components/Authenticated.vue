@@ -1,12 +1,12 @@
 <template>
-  <main>
+  <section class="team-container">
     <Team :key="team.id" v-for="team in teams" :team="team" />
-  </main>
+  </section>
 </template>
 
 <script>
 import { defineComponent, reactive, toRefs, onMounted } from "vue";
-import Team from "./Team.vue";
+import Team from "../components/Team.vue";
 import API from "@/services/api";
 
 export default defineComponent({
@@ -29,3 +29,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.team-container {
+  margin-top: 2rem;
+}
+</style>
