@@ -96,7 +96,7 @@ export default defineComponent({
       // draw bar chart
       const width = 500;
       const height = state.sprints.length * 25;
-      const transition = d3.transition().duration(500);
+      const transition = d3.transition().duration(1000);
 
       const x = d3
         .scaleLinear()
@@ -124,9 +124,9 @@ export default defineComponent({
       bars
         .append("rect")
         .attr("height", y.bandwidth())
-        .attr("width", (d) => x(d.points))
         .attr("fill", "#008B8B")
-        .transition(transition);
+        .transition(transition)
+        .attr("width", (d) => x(d.points));
 
       const text = bars
         .append("g")
@@ -140,7 +140,9 @@ export default defineComponent({
         .attr("dy", "-0.2em")
         .attr("fill", "white")
         .attr("font-size", 16)
-        .attr("text-anchor", "end");
+        .attr("text-anchor", "end")
+        .transition(transition)
+        .attr("opacity", 1);
 
       // points
       text
@@ -148,15 +150,20 @@ export default defineComponent({
         .text((d) => d.points)
         .attr("x", (d) => x(d.points) + 15)
         .attr("font-size", 16)
-        .attr("dy", "-0.2em");
+        .attr("dy", "-0.2em")
+        .transition(transition)
+        .attr("opacity", 1);
 
+      // start date and end date
       text
         .append("text")
         .text((d) => `(${d.start} - ${d.end})`)
         .attr("x", (d) => x(d.points) + 40)
         .attr("fill", "#008B8B")
         .attr("font-size", 16)
-        .attr("dy", "-0.2em");
+        .attr("dy", "-0.2em")
+        .transition(transition)
+        .attr("opacity", 1);
     });
 
     return {

@@ -1,33 +1,22 @@
 <template>
   <section class="secret-form">
+    <div class="fingerprint"><FingerprintIcon /></div>
+
     <div class="secret-input-group">
       <label for="secret-input" class="secret-label">Secret:</label>
 
-      <svg
-        class="secure-icon"
-        viewBox="0 0 50 65"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g clip-path="url(#clip0)" stroke="#708090" stroke-width="7">
-          <path
-            d="M42.492 26.016c0 .394.003.724.005 1.016.003.436.006.788-.002 1.142v.045c-.84.122-2.256.189-4.708.196-1.395.004-2.934-.008-4.734-.023-2.095-.016-4.543-.035-7.528-.035-4.153 0-7.537.051-10.243.092-1.068.017-2.03.031-2.893.04-2.5.027-3.983 0-4.889-.092v-.005c0-.289.004-.609.01-1.002v-.03c.006-.397.013-.85.013-1.344C7.523 12.841 16.016 3.5 25.008 3.5c8.99 0 17.484 9.34 17.484 22.516zm.666 2.06a.043.043 0 010 0zm-36.48.18a.092.092 0 010 0z"
-          />
-          <path d="M3.5 28.5h43v33h-43z" />
-        </g>
-        <defs>
-          <clipPath id="clip0">
-            <path fill="#fff" d="M0 0h50v65H0z" />
-          </clipPath>
-        </defs>
-      </svg>
+      <LockIcon />
 
       <input
         id="secret-input"
         class="secret-input"
-        type="text"
+        type="password"
         v-model="clientSecret"
       />
+
+      <p :class="[{ 'secret-error': error }, 'secret-location']">
+        {{ error || "Settings > Integration > Clickup API > Client Secret" }}
+      </p>
     </div>
 
     <a
@@ -41,25 +30,39 @@
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs, onMounted } from "vue";
+import { defineComponent, reactive, toRefs, onMounted, watch } from "vue";
+import FingerprintIcon from "@/assets/icons/Fingerprint.vue";
+import LockIcon from "@/assets/icons/Lock.vue";
 import API from "@/services/api";
 import Session from "@/services/session";
 import { CLICKUP_SECRET, CLICKUP_TOKEN } from "@/config/authentication";
 
 export default defineComponent({
-  setup: () => {
+  components: {
+    FingerprintIcon,
+    LockIcon,
+  },
+
+  setup: (_, { emit }) => {
     const state = reactive({
       clientID: "",
       clientRedirectURI: "",
       clientSecret: "",
       clientCode: "",
+      error: "",
     });
+
+    watch(
+      () => state.clientSecret,
+      () => {
+        state.error = "";
+      }
+    );
 
     onMounted(async () => {
       state.clientID = process.env.VUE_APP_CLICKUP_CLIENT_ID;
       state.clientRedirectURI = process.env.VUE_APP_CLICKUP_REDIRECT_URI;
       state.clientSecret = Session.get(CLICKUP_SECRET);
-      console.log(Session.get(CLICKUP_SECRET));
 
       const query = window.location.search;
       const urlParams = new URLSearchParams(query);
@@ -72,12 +75,20 @@ export default defineComponent({
           state.clientSecret
         );
 
-        Session.store(CLICKUP_TOKEN, token);
         Session.delete(CLICKUP_SECRET);
+
+        if (!token) {
+          state.error =
+            "Something went wrong. Please ensure you have entered the correct secret from Clickup Integrations.";
+
+          return;
+        }
+
+        Session.store(CLICKUP_TOKEN, token);
 
         state.clientSecret = "";
 
-        this.$emit("authenticated");
+        emit("login");
       }
     });
 
@@ -93,7 +104,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .auth-button {
   align-items: center;
   border: 0;
@@ -101,36 +112,52 @@ export default defineComponent({
   box-shadow: var(--var-box-shadow-s);
   display: flex;
   font-size: 1.2rem;
+  font-weight: bold;
   height: 3rem;
   justify-content: center;
   outline: 0;
   padding: 0.1rem 0.5rem;
   text-decoration: none;
+
+  &:active {
+    box-shadow: inset var(--var-box-shadow-s);
+    color: inherit;
+  }
+
+  &:focus {
+    border: 2px solid #cccccc;
+  }
 }
 
-.auth-button:active {
-  box-shadow: inset var(--var-box-shadow-s);
-  color: inherit;
+.fingerprint {
+  border: 0;
+  border-radius: 50%;
+  box-shadow: var(--var-image-shadow);
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  padding: 3rem;
 }
 
-.auth-button:focus {
-  border: 2px solid #cccccc;
+::v-deep .fingerprint-icon {
+  height: 10rem;
 }
 
 .secret-form {
   display: grid;
-  height: 100%;
+  margin-top: 10%;
   place-content: center;
-  width: 100%;
 }
 
 .secret-input-group {
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   position: relative;
+  width: 15rem;
 }
 
 .secret-label {
   display: block;
+  font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
@@ -141,16 +168,25 @@ export default defineComponent({
   font-size: 1rem;
   height: 3rem;
   padding: 1rem 1rem 1rem 2.5rem;
-  width: 15rem;
+  width: 100%;
+
+  &:focus {
+    box-shadow: inset var(--var-box-shadow-s);
+    outline: 0;
+  }
 }
 
-.secret-input:focus {
-  box-shadow: inset var(--var-box-shadow-s);
-  outline: 0;
+.secret-location {
+  font-size: 0.8rem;
+  margin-top: 1rem;
+
+  &.secret-error {
+    color: var(--var-error-color);
+  }
 }
 
-.secure-icon {
-  bottom: 1rem;
+::v-deep .lock-icon {
+  top: 2.8rem;
   left: 1rem;
   position: absolute;
   width: 0.8rem;

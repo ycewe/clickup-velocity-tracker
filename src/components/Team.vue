@@ -1,6 +1,5 @@
 <template>
   <h1 class="title">
-    <img class="team-avatar" :src="team.avatar" :alt="team.name" />
     {{ team.name }}
   </h1>
   <div class="space-container" v-if="spaces.length > 0">
@@ -41,10 +40,17 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .title {
-  font-size: 2.5rem;
+  -webkit-text-stroke: 2px #cccccc40;
+  color: var(--var-primary-color);
+  font-size: 5rem;
+  letter-spacing: 1rem;
+  margin-bottom: 2rem;
+  margin-top: 0.5rem;
   text-align: center;
+  text-shadow: var(--var-title-shadow);
+  text-transform: uppercase;
 }
 
 .team-avatar {

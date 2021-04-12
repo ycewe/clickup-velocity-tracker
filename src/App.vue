@@ -13,14 +13,24 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 :root {
-  --var-box-shadow-s: 10px 10px 20px 0 #d1d9e6, -10px -10px 20px 0 #ffffff;
-  --var-box-shadow-m: 12px 12px 16px 0 #d1d9e6, -8px -8px 16px 0 #ffffff;
+  --var-box-shadow-s: 8px 8px 14px 0 #d1d9e6, -8px -8px 14px 0 #ffffff80;
+  --var-box-shadow-m: 12px 12px 16px 0 #d1d9e6, -8px -8px 16px 0 #ffffff80;
+  --var-title-shadow: -8px 5px 8px #d1d9e6, 8px -5px 12px #ffffff80;
+  --var-image-shadow: inset 7px 7px 15px #d1d9e6, inset -7px -7px 20px #ffffff,
+    0px 0px 4px #ffffff40;
+
   --var-primary-color: #ecf0f3;
+  --var-secondary-color: #20b2aa;
+  --var-tertiary-color: #708090;
+
+  --var-error-color: #8b0000;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 

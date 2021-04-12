@@ -1,15 +1,17 @@
 <template>
   <main class="container">
-    <Authenticated v-if="isAuthenticated" />
+    <Authenticated v-if="isAuthenticated" @logout="setIsAuthenticated(false)" />
 
-    <Authentication v-else @authenticated="setIsAuthenticated" />
+    <transition v-else name="fade">
+      <Authentication @login="setIsAuthenticated(true)" />
+    </transition>
   </main>
 </template>
 
 <script>
 import { defineComponent, reactive, toRefs, onMounted } from "vue";
-import Authentication from "../components/Authentication.vue";
-import Authenticated from "../components/Authenticated.vue";
+import Authentication from "@/components/Authentication.vue";
+import Authenticated from "@/components/Authenticated.vue";
 import Session from "@/services/session";
 import { CLICKUP_TOKEN } from "@/config/authentication";
 
@@ -42,11 +44,10 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .container {
-  display: flex;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  min-width: 100vw;
+  padding: 1rem;
 }
 </style>

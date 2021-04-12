@@ -28,6 +28,8 @@ const API = {
 
       const data = await response.json();
 
+      this.headers["Authorization"] = data.access_token;
+
       return data.access_token;
     } catch (e) {
       console.error(e);

@@ -50,7 +50,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .velocity-container {
   padding: 1rem;
   border-radius: 10px;
