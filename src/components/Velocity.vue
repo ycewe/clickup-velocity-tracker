@@ -59,26 +59,28 @@ export default defineComponent({
               .map((task) => {
                 // newer stories may have custom field
                 const customFieldPoints = task.custom_fields.find(
-                  (field) => (field?.name ?? "").toLowerCase() === "Points"
+                  (field) => (field?.name ?? "").toLowerCase() === "points"
                 );
 
                 // parse points for each task
                 // clickup for teams may limit the number of assigned points to 100
+                if (customFieldPoints) {
+                  return customFieldPoints.value ?? 0;
+                }
+
                 if (task.points) {
                   return task.points;
-                } else if (customFieldPoints) {
-                  return customFieldPoints.value ?? 0;
-                } else {
-                  // assumption: story title is appended with the story points
-                  // separated by a dash or "-" should the
-                  // clickup points limit exceed team pricing
-                  const taskNameArr = task.name.split("-");
-                  const points = parseInt(
-                    taskNameArr[taskNameArr.length - 1].trim()
-                  );
-
-                  return points ?? 0;
                 }
+
+                // assumption: story title is appended with the story points
+                // separated by a dash or "-" should the
+                // clickup points limit exceed team pricing
+                const taskNameArr = task.name.split("-");
+                const points = parseInt(
+                  taskNameArr[taskNameArr.length - 1].trim()
+                );
+
+                return points || 0;
               })
               .reduce((accumulator, points) => accumulator + points, 0),
           });
